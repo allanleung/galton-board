@@ -1,28 +1,41 @@
-import { Engine, Render, World } from "matter-js";
+import { Engine, Render, Runner } from "matter-js";
 import { createBoard } from "./board";
 import { dropBall } from "./ball";
 
-// Create engine and world
+// Create the engine
 const engine = Engine.create();
-const world = engine.world;
+
+// Use engine.gravity (instead of world.gravity) to avoid deprecation warnings
+engine.gravity.y = 1;
+engine.gravity.scale = 0.01;
+
+// Define width & height for the renderer
+const WIDTH = 700;
+const HEIGHT = 770;
 
 // Create the renderer
 const render = Render.create({
   element: document.body,
   engine: engine,
   options: {
-    width: 800,
-    height: 600,
-    wireframes: false, // Use solid colors for better visualization
+    width: WIDTH,
+    height: HEIGHT,
+    wireframes: false, // Use solid colors
+    background: "#1A1A1A",
   },
 });
 
-// Add board elements
-createBoard(world);
+// Add board elements, passing the same width & height
+createBoard(engine.world, WIDTH, HEIGHT);
 
-// Drop a ball every second
-setInterval(() => dropBall(world), 1000);
+// Drop 100 balls at once (adjust as needed)
+for (let i = 0; i < 250; i++) {
+  dropBall(engine.world);
+}
 
-// Run the physics engine and renderer
-Engine.run(engine);
+// Use a Runner to update the engine over time
+const runner = Runner.create();
+Runner.run(runner, engine);
+
+// Start the renderer
 Render.run(render);
