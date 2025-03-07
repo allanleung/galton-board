@@ -5,7 +5,7 @@ export function dropBall(world: World, dropX?: number, dropY?: number) {
   const y = typeof dropY === "number" ? dropY : 50;
 
   const ball = Bodies.circle(x, y, 7, {
-    label: "ball", // <--- so we know it's a ball
+    label: "ball",
     restitution: 0.5,
     friction: 0.05,
     render: { fillStyle: "blue" },
